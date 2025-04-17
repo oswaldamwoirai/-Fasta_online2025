@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mawasiliano - Fasta Online</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f6fa;
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background-color: #004aad;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    nav {
+      background-color: #003c8f;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #004aad;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form button {
+      background-color: #004aad;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #00307a;
+    }
+    .contacts, .socials {
+      margin-top: 2rem;
+    }
+    .socials a {
+      margin-right: 1rem;
+      text-decoration: none;
+      color: #004aad;
+      font-weight: bold;
+    }
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .contact-info {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .contact-info h2 {
+      color: #004aad;
+      margin-bottom: 1.5rem;
+    }
+    .contact-info p {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .contact-info a {
+      color: #004aad;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .contact-info a:hover {
+      color: #0066ff;
+    }
+    .contact-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .contact-form h2 {
+      color: #004aad;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: bold;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .form-group textarea {
+      height: 150px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background: linear-gradient(45deg, #004aad, #0066ff);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .submit-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #0066ff, #004aad);
+    }
+    .social-links {
+      text-align: center;
+      margin: 3rem 0;
+    }
+    .social-links h2 {
+      color: #004aad;
+      margin-bottom: 1.5rem;
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+    .social-icons a:hover {
+      transform: scale(1.1);
+    }
+    .social-icons img {
+      width: 32px;
+      height: 32px;
+    }
+    footer {
+      background: #004aad;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    header {
+      background-image: url('fasta.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      padding: 4rem 1rem;
+      text-align: center;
+      color: white;
+      z-index: 1;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 74, 173, 0.9), rgba(0, 102, 255, 0.8));
+      z-index: -1;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      background-image: url('logo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: -1;
+    }
+
+    footer {
+      background-image: url('logo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+      z-index: 1;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 74, 173, 0.95), rgba(0, 102, 255, 0.9));
+      z-index: -1;
+    }
+
+    footer p {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mawasiliano - Fasta Online</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="huduma.html">Huduma</a>
+    <a href="faq.html">FAQ</a>
+    <a href="mawasiliano.html">Mawasiliano</a>
+  </nav>
+
+  <main>
+    <div class="contact-container">
+      <div class="contact-info">
+        <h2>Wasiliana Nasi</h2>
+        <p>
+          <img src="gmail.png" alt="Email" width="24" height="24">
+          <strong>Email:</strong> 
+          <a href="mailto:info@fastaonline2025@gmail.co.tz">info@fastaonline.co.tz</a>
+        </p>
+        <p>
+          <img src="phone.png" alt="Phone" width="24" height="24">
+          <strong>Simu:</strong> 
+          <a href="tel:+255658987561">+255 658 987 561</a>
+        </p>
+        <p>
+          <img src="whatsup.png" alt="WhatsApp" width="24" height="24">
+          <strong>WhatsApp:</strong> 
+          <a href="https://wa.me/255658987561" target="_blank">+255 658 987 561</a>
+        </p>
+        <p>
+          <img src="location.png" alt="Location" width="24" height="24">
+          <strong>Location:</strong> 
+          kariakoo, Dar es Salaam, Tanzania
+        </p>
+      </div>
+
+      <div class="contact-form">
+        <h2>Tuma Ujumbe</h2>
+        <form action="#" method="POST">
+          <div class="form-group">
+            <label for="name">Jina Kamili:</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Barua Pepe:</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Namba ya Simu:</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Ujumbe:</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Tuma Ujumbe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="social-links">
+      <h2>Mitandao ya Kijamii</h2>
+      <div class="social-icons">
+        <a href="https://facebook.com/fasta_online2025" target="_blank">
+          <img src="facebook.png" alt="Facebook">
+          <span>Facebook</span>
+        </a>
+        <a href="https://instagram.com/fasta_online2025" target="_blank">
+          <img src="instagram.png" alt="Instagram">
+          <span>Instagram</span>
+        </a>
+        <a href="https://t.me/fastaonline" target="_blank">
+          <img src="telegram.png" alt="Telegram">
+          <span>Telegram</span>
+        </a>
+        <a href="https://wa.me/255658987561" target="_blank">
+          <img src="whatsup.png" alt="WhatsApp">
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Fasta Online</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matokeo ya Mitihani - Fasta Online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #475569;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('logo.jpg') center/cover no-repeat;
+      opacity: 0.1;
+      z-index: 1;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .home-link {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2rem;
+      transition: all 0.3s ease;
+      z-index: 3;
+    }
+
+    .home-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .service-header {
+      background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .service-header i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-header h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-content {
+      padding: 1.5rem;
+    }
+
+    .search-form {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      font-weight: 500;
+    }
+
+    .search-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--secondary);
+    }
+
+    .feature-list i {
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="index.html" class="home-link">
+      <i class="fas fa-home"></i>
+      Nyumbani
+    </a>
+    <div class="header-content">
+      <h1>Matokeo ya Mitihani</h1>
+      <p>Angalia matokeo ya mitihani na uhakiki wa udahili</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="services-grid">
+      <!-- NECTA Results Card -->
+      <div class="service-card">
+        <div class="service-header">
+          <i class="fas fa-graduation-cap"></i>
+          <h2>Matokeo ya NECTA</h2>
+          <p>Matokeo ya Mitihani ya Taifa</p>
+        </div>
+        <div class="service-content">
+          <form class="search-form" onsubmit="searchNectaResults(event)">
+            <div class="form-group">
+              <label for="exam-type">Aina ya Mtihani</label>
+              <select id="exam-type" required>
+                <option value="">Chagua...</option>
+                <option value="csee">Form 4 (CSEE)</option>
+                <option value="acsee">Form 6 (ACSEE)</option>
+                <option value="psle">Darasa la 7 (PSLE)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exam-year">Mwaka</label>
+              <select id="exam-year" required>
+                <option value="">Chagua...</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exam-number">Namba ya Mtihani</label>
+              <input type="text" id="exam-number" placeholder="S0000/0000" required>
+            </div>
+            <button type="submit" class="search-btn">Tafuta Matokeo</button>
+          </form>
+          <ul class="feature-list">
+            <li><i class="fas fa-check"></i> Matokeo ya Form 4 na 6</li>
+            <li><i class="fas fa-check"></i> Matokeo ya Darasa la 7</li>
+            <li><i class="fas fa-check"></i> Matokeo ya QT</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mock Exams Card -->
+      <div class="service-card">
+        <div class="service-header">
+          <i class="fas fa-book"></i>
+          <h2>Matokeo ya Mock</h2>
+          <p>Matokeo ya Mitihani ya Majaribio</p>
+        </div>
+        <div class="service-content">
+          <form class="search-form" onsubmit="searchMockResults(event)">
+            <div class="form-group">
+              <label for="mock-region">Mkoa</label>
+              <select id="mock-region" required>
+                <option value="">Chagua...</option>
+                <option value="dar">Dar es Salaam</option>
+                <option value="arusha">Arusha</option>
+                <option value="mwanza">Mwanza</option>
+                <option value="dodoma">Dodoma</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mock-year">Mwaka</label>
+              <select id="mock-year" required>
+                <option value="">Chagua...</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mock-number">Namba ya Usajili</label>
+              <input type="text" id="mock-number" placeholder="M0000/2024" required>
+            </div>
+            <button type="submit" class="search-btn">Tafuta Matokeo</button>
+          </form>
+          <ul class="feature-list">
+            <li><i class="fas fa-check"></i> Matokeo ya Mikoa Yote</li>
+            <li><i class="fas fa-check"></i> Matokeo ya Pre-mock</li>
+            <li><i class="fas fa-check"></i> Uchambuzi wa Matokeo</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Admission Checker Card -->
+      <div class="service-card">
+        <div class="service-header">
+          <i class="fas fa-university"></i>
+          <h2>Uhakiki wa Udahili</h2>
+          <p>Angalia Hali ya Udahili</p>
+        </div>
+        <div class="service-content">
+          <form class="search-form" onsubmit="checkAdmission(event)">
+            <div class="form-group">
+              <label for="institution-type">Aina ya Taasisi</label>
+              <select id="institution-type" required>
+                <option value="">Chagua...</option>
+                <option value="university">Vyuo Vikuu</option>
+                <option value="college">Vyuo vya Kati</option>
+                <option value="tvet">VETA</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="admission-number">Namba ya Udahili/TCU</label>
+              <input type="text" id="admission-number" placeholder="TCU/2024/xxxxx" required>
+            </div>
+            <button type="submit" class="search-btn">Angalia Udahili</button>
+          </form>
+          <ul class="feature-list">
+            <li><i class="fas fa-check"></i> Vyuo Vikuu Vyote</li>
+            <li><i class="fas fa-check"></i> Vyuo vya Kati na VETA</li>
+            <li><i class="fas fa-check"></i> Hali ya Malipo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function searchNectaResults(event) {
+      event.preventDefault();
+      const examType = document.getElementById('exam-type').value;
+      const examYear = document.getElementById('exam-year').value;
+      const examNumber = document.getElementById('exam-number').value;
+      
+      // NECTA result URLs based on exam type
+      const nectaUrls = {
+        'csee': 'https://onlinesys.necta.go.tz/results/',
+        'acsee': 'https://onlinesys.necta.go.tz/results/',
+        'psle': 'https://onlinesys.necta.go.tz/results/'
+      };
+
+      // Clean up the exam number
+      const cleanExamNumber = examNumber.trim().toUpperCase();
+      
+      // Construct the NECTA URL with parameters
+      const nectaUrl = `${nectaUrls[examType]}${examYear}/${cleanExamNumber}`;
+      
+      // Open NECTA results in a new tab
+      window.open(nectaUrl, '_blank');
+    }
+
+    function searchMockResults(event) {
+      event.preventDefault();
+      const region = document.getElementById('mock-region').value;
+      const year = document.getElementById('mock-year').value;
+      const number = document.getElementById('mock-number').value;
+      
+      // Here you would normally make an API call to fetch results
+      alert(`Inatafuta matokeo ya mock ${region} mwaka ${year} namba ${number}`);
+    }
+
+    function checkAdmission(event) {
+      event.preventDefault();
+      const instituteType = document.getElementById('institution-type').value;
+      const admissionNumber = document.getElementById('admission-number').value;
+      
+      // Here you would normally make an API call to check admission status
+      alert(`Inaangalia udahili wa ${instituteType} namba ${admissionNumber}`);
+    }
+  </script>
+</body>
+</html>

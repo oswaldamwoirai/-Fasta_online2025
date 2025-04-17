@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habari na Matangazo - Fasta Online</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f7fb;
+    }
+    header {
+      background-color: #004aad;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #003c8f;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    .news-card {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+    .featured-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 3px solid #004aad;
+    }
+    .card-content {
+      padding: 1.5rem;
+    }
+    .news-card h3 {
+      color: #004aad;
+      margin: 0 0 1rem 0;
+      font-size: 1.4rem;
+    }
+    .job-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .job-meta div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .job-meta i {
+      color: #004aad;
+    }
+    .description {
+      color: #555;
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    .positions {
+      background-color: #e8f0fe;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-weight: bold;
+      color: #004aad;
+    }
+    .news-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(45deg, #004aad, #0066ff);
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: auto;
+      align-self: flex-start;
+    }
+    .news-card a:hover {
+      background: linear-gradient(45deg, #0066ff, #004aad);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .status-tag {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      background-color: #4CAF50;
+      color: white;
+    }
+    .expired {
+      background-color: #f44336;
+    }
+    footer {
+      background-color: #003c8f;
+      background-image: linear-gradient(45deg, #003c8f, #004aad);
+      color: white;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+    }
+    .footer-section h4 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+    .footer-links a {
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.3s ease;
+    }
+    .footer-links a:hover {
+      transform: translateX(5px);
+    }
+    .footer-links i {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      padding: 8px;
+    }
+    .social-links {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      width: 160px;
+    }
+
+    .social-links a i {
+      font-size: 20px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .social-links a:hover i {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .social-links a.whatsapp {
+      background: #25D366;
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+    }
+
+    .social-links a.instagram {
+      background: #E4405F;
+      box-shadow: 0 4px 10px rgba(228, 64, 95, 0.3);
+    }
+
+    .social-links a.facebook {
+      background: #1877F2;
+      box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-links span {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .copyright {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    /* News Animation Styles */
+    .news-ticker {
+      background: linear-gradient(to right, #004aad, #0066ff);
+      color: white;
+      padding: 1rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .news-ticker-content {
+      display: flex;
+      animation: tickerScroll 30s linear infinite;
+      white-space: nowrap;
+    }
+
+    .news-ticker-item {
+      margin-right: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .news-ticker-item i {
+      color: #ffd700;
+    }
+
+    @keyframes tickerScroll {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <h1>Habari na Matangazo</h1>
+    <p>Karibu upate taarifa mpya kutoka Fasta Online</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="huduma.html">Huduma</a>
+    <a href="faq.html">FAQ</a>
+    <a href="mawasiliano.html">Mawasiliano</a>
+  </nav>
+
+  <div class="news-ticker">
+    <div class="news-ticker-content">
+      <div class="news-ticker-item">
+        <i class="fas fa-star"></i>
+        <span>Nafasi mpya za kazi TAMISEMI - Deadline: 30/04/2025</span>
+      </div>
+      <div class="news-ticker-item">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Internship opportunities kwa wahitimu wa afya</span>
+      </div>
+      <div class="news-ticker-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Business Plan templates mpya zinapatikana</span>
+      </div>
+      <div class="news-ticker-item">
+        <i class="fas fa-briefcase"></i>
+        <span>Ajira mpya serikalini - Maombi yanaendelea</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="news-grid">
+    <div class="news-card">
+      <span class="status-tag">Active</span>
+      <img src="business.png" alt="Government Jobs" class="featured-image">
+      <div class="card-content">
+        <h3>Nafasi Mpya za Kazi za Serikali</h3>
+        <div class="job-meta">
+          <div><i>📅</i> Posted: 15 Aprili 2025</div>
+          <div><i>⏰</i> Expires: 30 Aprili 2025</div>
+        </div>
+        <div class="positions">Nafasi: 300+</div>
+        <p class="description">Tumepata nafasi zaidi ya 300 za kazi kutoka TAMISEMI na UTUMISHI. Angalia sifa na jinsi ya kutuma maombi.</p>
+        <a href="form.html">Soma zaidi</a>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="status-tag">Active</span>
+      <img src="internship.png" alt="Health Internships" class="featured-image">
+      <div class="card-content">
+        <h3>Internship za kulipwa kwa wahitimu wa Afya</h3>
+        <div class="job-meta">
+          <div><i>📅</i> Posted: 13 Aprili 2025</div>
+          <div><i>⏰</i> Expires: 28 Aprili 2025</div>
+        </div>
+        <div class="positions">Nafasi: 150</div>
+        <p class="description">Tunawasiliana na vituo mbalimbali vya afya kutoa internship za kulipwa kwa wahitimu wa mwaka wa mwisho. Jiandikishe sasa.</p>
+        <a href="form.html">Soma zaidi</a>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="status-tag">Active</span>
+      <img src="business plan.png" alt="Business Plan" class="featured-image">
+      <div class="card-content">
+        <h3>Huduma Mpya: Kuandaa Business Plan</h3>
+        <div class="job-meta">
+          <div><i>📅</i> Posted: 10 Aprili 2025</div>
+          <div><i>⏰</i> Ongoing Service</div>
+        </div>
+        <p class="description">Fasta Online sasa inakusaidia kuandaa business plan kwa ajili ya mikopo ya vijana na wanawake. Tunaandaa business plan zenye ubora wa hali ya juu kwa bei nafuu.</p>
+        <a href="form.html">Soma zaidi</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-user-plus"></i> Register</a></li>
+          <li><a href="#"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+          <li><a href="#"><i class="fas fa-bell"></i> Job Alerts</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Job Categories</h4>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-hospital"></i> Health Sector</a></li>
+          <li><a href="#"><i class="fas fa-graduation-cap"></i> Education</a></li>
+          <li><a href="#"><i class="fas fa-building"></i> Administration</a></li>
+          <li><a href="#"><i class="fas fa-laptop-code"></i> IT & Technology</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Stay Connected</h4>
+        <div class="social-links">
+          <a href="https://wa.me/255658987561" target="_blank" class="whatsapp">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
+          <a href="https://instagram.com/fasta_online2025" target="_blank" class="instagram">
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+          <a href="https://facebook.com/fasta_online2025" target="_blank" class="facebook">
+            <i class="fab fa-facebook-f"></i>
+            <span>Facebook</span>
+          </a>
+        </div>
+        <p>Subscribe to job alerts:</p>
+        <a href="#" style="color: white; text-decoration: none; display: inline-block; padding: 0.5rem 1rem; background: #0066ff; border-radius: 20px; margin-top: 0.5rem;">
+          <i class="fas fa-bell"></i> Get Notifications
+        </a>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 Fasta Online. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

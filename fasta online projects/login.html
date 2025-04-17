@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fasta Online - Ingia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('logo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.85) 0%, rgba(37, 99, 235, 0.75) 100%);
+      z-index: 1;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                  0 8px 24px -12px rgba(0, 0, 0, 0.15),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .login-header {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.05));
+      border-radius: 1.5rem 1.5rem 0 0;
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .login-header img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      border-radius: 1.5rem;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0.75rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .login-header img:hover {
+      transform: translateY(-5px);
+    }
+
+    .login-form {
+      padding: 2rem;
+      color: white;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus ~ label {
+      transform: translateY(-2px);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      padding-left: 3rem;
+    }
+
+    .form-group i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group input:focus + i {
+      color: rgba(255, 255, 255, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .password-field {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      color: rgba(255, 255, 255, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .form-group .input-focus-effect {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #60a5fa, #3b82f6);
+      transition: width 0.3s ease;
+    }
+
+    .form-group input:focus ~ .input-focus-effect {
+      width: 100%;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .form-group.error input {
+      border-color: rgba(239, 68, 68, 0.5);
+      animation: shake 0.3s ease-in-out;
+    }
+
+    .form-group.error i {
+      color: rgba(239, 68, 68, 0.8);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+      border: none;
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+      background: linear-gradient(to right, #2563eb, #1d4ed8);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .forgot-password a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    .social-login {
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .social-login::before {
+      content: 'AU';
+      position: absolute;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 1rem;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .social-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .social-btn:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-btn.facebook {
+      background: linear-gradient(45deg, #3b5998, #4c70ba);
+    }
+
+    .social-btn.google {
+      background: linear-gradient(45deg, #db4437, #f4511e);
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.5rem 0;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .login-divider span {
+      padding: 0 1rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .register-section {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 1rem;
+      border-radius: 0 0 1.5rem 1.5rem;
+    }
+
+    .register-section p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .register-btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-header">
+      <img src="logo.jpg" alt="Fasta Online Logo">
+      <h1>Karibu Fasta Online</h1>
+      <p>Ingia ili kuendelea</p>
+    </div>
+
+    <form class="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <i class="fas fa-envelope"></i>
+        <label for="email">Barua pepe</label>
+        <input type="email" id="email" required placeholder="mfano@email.com">
+        <div class="input-focus-effect"></div>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-lock"></i>
+        <label for="password">Nywila</label>
+        <div class="password-field">
+          <input type="password" id="password" required placeholder="Ingiza nywila yako">
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+            <i class="far fa-eye"></i>
+          </button>
+        </div>
+        <div class="input-focus-effect"></div>
+      </div>
+
+      <div class="form-footer">
+        <label class="remember-me">
+          <input type="checkbox" id="remember">
+          <span>Nikumbuke</span>
+        </label>
+        <a href="#" class="forgot-password" onclick="showForgotPassword()">Umesahau nywila?</a>
+      </div>
+
+      <button type="submit" class="login-btn">Ingia</button>
+    </form>
+
+    <div class="login-divider">
+      <span>Au ingia kupitia</span>
+    </div>
+
+    <div class="social-login">
+      <div class="social-buttons">
+        <button type="button" class="social-btn facebook" onclick="socialLogin('facebook')">
+          <i class="fab fa-facebook-f"></i>
+        </button>
+        <button type="button" class="social-btn google" onclick="socialLogin('google')">
+          <i class="fab fa-google"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="register-section">
+      <p>Huna akaunti? Jisajili sasa!</p>
+      <a href="#" class="register-btn" onclick="redirectToRegister()">Fungua Akaunti</a>
+    </div>
+  </div>
+
+  <script>
+    // Password visibility toggle
+    const passwordToggle = document.querySelector('.password-toggle');
+    const passwordInput = document.querySelector('#password');
+
+    passwordToggle.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      // Toggle icon
+      const icon = this.querySelector('i');
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    });
+
+    // Form validation and error handling
+    const loginForm = document.querySelector('.login-form');
+    const emailInput = document.querySelector('#email');
+
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Reset error states
+      document.querySelectorAll('.form-group').forEach(group => {
+        group.classList.remove('error');
+      });
+
+      let hasError = false;
+
+      // Email validation
+      if (!emailInput.value.includes('@')) {
+        emailInput.parentElement.classList.add('error');
+        hasError = true;
+      }
+
+      // Password validation (minimum 6 characters)
+      if (passwordInput.value.length < 6) {
+        passwordInput.parentElement.classList.add('error');
+        hasError = true;
+      }
+
+      if (!hasError) {
+        // Proceed with login
+        handleLogin(e);
+      }
+    });
+
+    // Social login handlers
+    function socialLogin(provider) {
+      const btn = event.currentTarget;
+      btn.style.transform = 'scale(0.95)';
+      
+      // Show loading overlay
+      const loadingOverlay = document.querySelector('.loading-overlay');
+      loadingOverlay.style.display = 'flex';
+
+      setTimeout(() => {
+        // Here you would normally handle social authentication
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('userProvider', provider);
+        
+        // Redirect to dashboard
+        window.location.href = 'user-dashboard.html';
+      }, 1500);
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Show loading overlay
+      const loadingOverlay = document.querySelector('.loading-overlay');
+      loadingOverlay.style.display = 'flex';
+
+      // Simulate API call (replace with actual authentication)
+      setTimeout(() => {
+        // Here you would normally validate credentials with a server
+        if (email && password) {
+          // Store user session
+          localStorage.setItem('userLoggedIn', 'true');
+          localStorage.setItem('userEmail', email);
+          
+          // Redirect to dashboard
+          window.location.href = 'user-dashboard.html';
+        } else {
+          // Hide loading overlay if error
+          loadingOverlay.style.display = 'none';
+          // Show error
+          alert('Tafadhali jaza taarifa zako zote');
+        }
+      }, 1500);
+    }
+
+    function redirectToRegister() {
+      // Show loading overlay
+      const loadingOverlay = document.querySelector('.loading-overlay');
+      loadingOverlay.style.display = 'flex';
+      
+      // Redirect to registration page
+      setTimeout(() => {
+        window.location.href = 'registration.html';
+      }, 500);
+    }
+
+    // Check if user is already logged in
+    window.addEventListener('load', function() {
+      if (localStorage.getItem('userLoggedIn') === 'true') {
+        window.location.href = 'user-dashboard.html';
+      }
+    });
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleButton = document.querySelector('.password-toggle i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleButton.classList.remove('fa-eye');
+        toggleButton.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        toggleButton.classList.remove('fa-eye-slash');
+        toggleButton.classList.add('fa-eye');
+      }
+    }
+
+    function showForgotPassword() {
+      // Implement password recovery logic
+      window.location.href = 'password-recovery.html';
+    }
+
+    function showRegistration() {
+      // Redirect to registration page
+      window.location.href = 'registration.html';
+    }
+  </script>
+</body>
+</html>

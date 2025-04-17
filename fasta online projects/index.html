@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fasta Online - Huduma za Mtandaoni</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f7fb;
+    }
+    header {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 50%, rgba(37,99,235,0.15) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      background: linear-gradient(to right, #ffffff 0%, #dbeafe 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s infinite linear;
+    }
+
+    header p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.2rem;
+      color: #e0e7ff;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    nav {
+      background: linear-gradient(to right, #003c8f, #004aad);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    nav li {
+      margin-right: 20px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    nav a:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    nav a:hover:before {
+      transform: translateX(0);
+    }
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    nav a.active {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav a:before {
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      margin-right: 0.5rem;
+    }
+    section {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .service-cards, .news-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .service-card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+    .service-card:hover::before {
+      opacity: 0.25;
+    }
+    .service-card h3, .service-card p, .service-card a {
+      position: relative;
+      z-index: 2;
+    }
+    .service-card h3 {
+      color: #004aad;
+      margin-bottom: 0.5rem;
+    }
+    .service-card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .service-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(45deg, #004aad, #0066ff);
+      border-radius: 25px;
+      transition: transform 0.3s ease;
+    }
+    .service-card a:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #0066ff, #004aad);
+    }
+    #nida-card::before {
+      background-image: url('nida2.png');
+    }
+    #birth-cert-card::before {
+      background-image: url('rita.png');
+    }
+    #cv-card::before {
+      background-image: url('cv.png');
+    }
+    #business-card::before {
+      background-image: url('business.png');
+    }
+    #exam-results-card::before {
+      background-image: url('necta.png');
+    }
+    .news-card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .news-card:hover {
+      transform: translateY(-5px);
+    }
+    .news-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+    .news-card:hover::before {
+      opacity: 0.25;
+    }
+    .news-card h3, .news-card p, .news-card a {
+      position: relative;
+      z-index: 2;
+    }
+    .news-card h3 {
+      color: #004aad;
+      margin-bottom: 0.5rem;
+    }
+    .news-card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .news-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(45deg, #004aad, #0066ff);
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .news-card a:hover {
+      background: linear-gradient(45deg, #0066ff, #004aad);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    #jobs-card::before {
+      background-image: url('business.png');
+    }
+    #internship-card::before {
+      background-image: url('internship.png');
+    }
+    #business-plan-card::before {
+      background-image: url('business plan.png');
+    }
+    footer {
+      background-color: #003c8f;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    .social-links {
+      margin: 1rem 0;
+    }
+    .social-links a {
+      display: inline-block;
+      margin: 0 10px;
+      text-decoration: none;
+      color: white;
+    }
+    .social-links img {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      transition: transform 0.3s ease;
+    }
+    .social-links img:hover {
+      transform: scale(1.1);
+    }
+    .social-links span {
+      margin-left: 5px;
+      font-size: 0.9rem;
+    }
+
+    /* Mobile Responsiveness */
+    @media only screen and (max-width: 768px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .service-cards, .news-cards {
+        grid-template-columns: 1fr; /* Single column on small screens */
+      }
+      .service-card, .news-card {
+        padding: 1rem;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      header p {
+        font-size: 1rem;
+      }
+      .service-card, .news-card {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Karibu  Fasta Online</h1>
+    <p>Tunatoa huduma za mtandaoni kwa urahisi na haraka - Fasta Online</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html" class="active">Nyumbani</a></li>
+      <li><a href="jobs.html">Ajira</a></li>
+      <li><a href="academic.html">Matokeo</a></li>
+      <li><a href="news.html">Habari</a></li>
+      <li><a href="mawasiliano.html">Mawasiliano</a></li>
+      <li><a href="login.html" class="login-btn">Ingia</a></li>
+    </ul>
+  </nav>
+
+  <section>
+    <h2>Huduma Zetu</h2>
+    <div class="service-cards">
+      <div class="service-card" id="nida-card">
+        <h3>Maombi ya NIDA</h3>
+        <p>Jaza fomu na tupatie taarifa zako ili tuanze mchakato wa kupata NIDA yako.</p>
+        <a href="huduma.html">Soma Zaidi</a>
+      </div>
+      <div class="service-card" id="birth-cert-card">
+        <h3>Vyeti vya Kuzaliwa</h3>
+        <p>Fasta Online inatoa huduma ya maombi ya vyeti vya kuzaliwa kwa njia rahisi.</p>
+        <a href="huduma.html">Soma Zaidi</a>
+      </div>
+      <div class="service-card" id="cv-card">
+        <h3>CV Guide</h3>
+        <p>Jifunze jinsi ya kuandaa CV yako ya kisasa kwa hatua rahisi.</p>
+        <a href="huduma.html">Soma Zaidi</a>
+      </div>
+      <div class="service-card" id="business-card">
+        <h3>Leseni ya Biashara</h3>
+        <p>Omba leseni ya biashara kwa urahisi kupitia Fasta Online.</p>
+        <a href="huduma.html">Soma Zaidi</a>
+      </div>
+      <div class="service-card" id="exam-results-card">
+        <h3>Matokeo ya Mitihani</h3>
+        <p>Angalia matokeo ya mitihani ya NECTA, Mock za Mikoa na Wilaya kutoka shule zote Tanzania.</p>
+        <a href="huduma.html">Soma Zaidi</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Matangazo na Habari</h2>
+    <div class="news-cards">
+      <div class="news-card" id="jobs-card">
+        <h3>Nafasi Mpya za Kazi za Serikali</h3>
+        <p>Tumepata nafasi zaidi ya 300 za kazi kutoka TAMISEMI na UTUMISHI. Angalia sifa na jinsi ya kutuma maombi.</p>
+        <a href="news.html">Soma Zaidi</a>
+      </div>
+      <div class="news-card" id="internship-card">
+        <h3>Internship za Kulipwa kwa Wahitimu wa Afya</h3>
+        <p>Tunawasiliana na vituo mbalimbali vya afya kutoa internship za kulipwa kwa wahitimu wa mwaka wa mwisho. Jiandikishe sasa.</p>
+        <a href="news.html">Soma Zaidi</a>
+      </div>
+      <div class="news-card" id="business-plan-card">
+        <h3>Huduma Mpya: Kuandaa Business Plan</h3>
+        <p>Fasta Online sasa inakusaidia kuandaa business plan kwa ajili ya mikopo ya vijana na wanawake.</p>
+        <a href="news.html">Soma Zaidi</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://wa.me/255658987561" target="_blank">
+        <img src="whatsup.png" width="32" height="32" alt="WhatsApp">
+        <span>fasta_online</span>
+      </a>
+      <a href="https://instagram.com/fasta_online2025" target="_blank">
+        <img src="instagram.png" width="32" height="32" alt="Instagram">
+        <span>fasta_online</span>
+      </a>
+      <a href="https://facebook.com/fasta_online2025" target="_blank">
+        <img src="facebook.png" width="32" height="32" alt="Facebook">
+        <span>fasta_online</span>
+      </a>
+    </div>
+    <p>&copy; 2025 Fasta Online</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fasta Online - Nafasi za Kazi</title>
+  <link rel="stylesheet" href="jobs.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background: #f4f6fa;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .jobs-header {
+      width: 100vw;
+      min-width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      height: 270px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 2.5px solid #dbeafe;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.09);
+      background:
+        linear-gradient(120deg, rgba(30,41,59,0.85) 0%, rgba(37,99,235,0.60) 60%, rgba(240,244,255,0.38) 100%),
+        url('logo.jpg') center center/cover no-repeat;
+      z-index: 10;
+    }
+    .jobs-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(90deg, rgba(30,41,59,0.15) 0%, rgba(37,99,235,0.09) 60%, rgba(240,244,255,0.07) 100%);
+      backdrop-filter: blur(1.5px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .jobs-header h1 {
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(30,41,59,0.82);
+      padding: 12px 38px 10px 38px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      margin-top: 0;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 24px 0 rgba(30,41,59,0.13);
+      border: 2px solid #2563eb44;
+      text-shadow: 0 2px 12px rgba(30,41,59,0.22), 0 1px 2px rgba(0,0,0,0.12);
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeUp 1.2s cubic-bezier(.39,.58,.57,1) 0.1s forwards;
+    }
+    .jobs-header p {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #e0e7ef;
+      background: rgba(37,99,235,0.62);
+      padding: 7px 22px;
+      border-radius: 10px;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 12px 0 rgba(30,41,59,0.11);
+      border: 1.5px solid #2563eb33;
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeUp 1.2s cubic-bezier(.39,.58,.57,1) 0.45s forwards;
+    }
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 600px) {
+      .jobs-header {
+        height: 170px;
+      }
+      .jobs-header h1 {
+        font-size: 2rem;
+        padding: 7px 12px;
+      }
+      .jobs-header p {
+        font-size: 1rem;
+        padding: 5px 10px;
+      }
+    }
+    .jobs-header h1, .jobs-header p {
+      position: relative;
+      z-index: 2;
+      color: #222;
+      margin: 0;
+      background: rgba(255,255,255,0.85);
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .jobs-header h1 {
+      font-size: 2.1rem;
+      margin-bottom: 8px;
+    }
+    .jobs-header p {
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    /* Enhanced Search & Filter Section */
+    .search-filters {
+      background: rgba(255,255,255,0.82);
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 32px 0 rgba(37,99,235,0.09), 0 1.5px 8px 0 rgba(30,41,59,0.07);
+      padding: 2.1rem 2rem 1.5rem 2rem;
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(6px);
+      border: 1.5px solid #e0e7ef;
+      position: relative;
+      overflow: visible;
+      transition: box-shadow 0.25s;
+    }
+    .search-filters:focus-within {
+      box-shadow: 0 12px 36px 0 rgba(37,99,235,0.17), 0 1.5px 8px 0 rgba(30,41,59,0.09);
+      border-color: #2563eb77;
+    }
+    .search-box {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 1.7rem;
+      align-items: center;
+      background: rgba(240,244,255,0.52);
+      border-radius: 0.75rem;
+      padding: 0.7rem 1rem;
+      box-shadow: 0 2px 12px 0 rgba(30,41,59,0.07);
+    }
+    .search-input {
+      flex: 1;
+      padding: 0.85rem 1.1rem;
+      border: 1.5px solid #dbeafe;
+      border-radius: 0.7rem;
+      font-size: 1.08rem;
+      background: rgba(255,255,255,0.85);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
+      background: #f0f4ff;
+    }
+    .search-btn {
+      padding: 0.85rem 1.7rem;
+      background: linear-gradient(90deg, #2563eb 60%, #1e40af 100%);
+      color: #fff;
+      border: none;
+      border-radius: 0.7rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+      box-shadow: 0 2px 8px 0 rgba(37,99,235,0.09);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .search-btn:hover, .search-btn:focus {
+      background: linear-gradient(90deg, #1e40af 20%, #2563eb 100%);
+      box-shadow: 0 4px 16px 0 rgba(37,99,235,0.15);
+      transform: translateY(-2px) scale(1.035);
+      outline: none;
+    }
+    .filter-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.15rem 1.7rem;
+      margin-top: 0.5rem;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: rgba(240,244,255,0.32);
+      border-radius: 0.6rem;
+      padding: 0.6rem 0.9rem 0.8rem 0.9rem;
+      box-shadow: 0 1px 8px 0 rgba(30,41,59,0.05);
+      border: 1px solid #e0e7ef;
+      transition: box-shadow 0.18s, border 0.18s;
+    }
+    .filter-group label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 0.25rem;
+    }
+    .filter-group select {
+      padding: 0.55rem 0.7rem;
+      border: 1.5px solid #dbeafe;
+      border-radius: 0.5rem;
+      font-size: 1.02rem;
+      background: rgba(255,255,255,0.88);
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    .filter-group select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
+      background: #f0f4ff;
+    }
+    @media (max-width: 700px) {
+      .search-filters {
+        padding: 1.1rem 0.7rem 1rem 0.7rem;
+      }
+      .search-box {
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 0.5rem 0.3rem;
+      }
+      .filter-groups {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+    }
+
+    /* Trending Jobs Section */
+    .trending-jobs {
+      gap: 2rem 1.5rem;
+    }
+    .trending-job-card {
+      background: linear-gradient(120deg, #f0f4ff 70%, #dbeafe 100%);
+      border-radius: 1.3rem;
+      box-shadow: 0 6px 32px 0 rgba(37,99,235,0.09), 0 2px 12px 0 rgba(30,41,59,0.07);
+      border: 2.5px solid #2563eb22;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      overflow: hidden;
+      transition: transform 0.18s, box-shadow 0.18s;
+      position: relative;
+      min-height: 170px;
+    }
+    .trending-job-card:hover {
+      box-shadow: 0 12px 36px 0 rgba(37,99,235,0.17), 0 2px 16px 0 rgba(30,41,59,0.09);
+      transform: translateY(-6px) scale(1.025);
+      border-color: #2563eb55;
+    }
+    .job-featured-img {
+      width: 110px;
+      height: 110px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #2563eb22 60%, #1e293b08 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.9rem;
+      margin: 1.2rem 1.1rem 1.2rem 1.2rem;
+      overflow: hidden;
+      box-shadow: 0 2px 10px 0 rgba(37,99,235,0.08);
+    }
+    .job-featured-img img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 0.7rem;
+      background: #fff;
+      padding: 6px;
+      box-shadow: 0 1px 6px 0 rgba(30,41,59,0.08);
+    }
+    .job-card-content {
+      flex: 1;
+      padding: 1.2rem 1.2rem 1.2rem 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .job-meta-tags {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .job-tag {
+      display: inline-block;
+      padding: 0.28em 0.95em;
+      border-radius: 1em;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: #e0e7ef;
+      color: #2563eb;
+      margin-right: 0.15em;
+      box-shadow: 0 1px 4px 0 rgba(37,99,235,0.06);
+      border: 1.5px solid #2563eb22;
+      transition: background 0.15s, color 0.15s;
+    }
+    .job-tag.urgent {
+      background: linear-gradient(90deg, #ff6b6b 60%, #ffb199 100%);
+      color: #fff;
+      border: 1.5px solid #ff6b6b44;
+    }
+    .job-tag.fulltime {
+      background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+      color: #fff;
+      border: 1.5px solid #2563eb44;
+    }
+    .job-tag.location {
+      background: #f0f4ff;
+      color: #1e293b;
+      border: 1.5px solid #d1d5db;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .job-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.1rem;
+      letter-spacing: 0.5px;
+    }
+    .company-name {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 0.25rem;
+    }
+    .job-salary {
+      font-size: 1.01rem;
+      font-weight: 600;
+      color: #0e7490;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+    .job-desc {
+      font-size: 0.99rem;
+      color: #334155;
+      margin-top: 0.45rem;
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+    @media (max-width: 700px) {
+      .trending-job-card {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: unset;
+      }
+      .job-featured-img {
+        width: 100%;
+        height: 70vw;
+        max-height: 180px;
+        margin: 1rem auto 0.7rem auto;
+        border-radius: 1.1rem 1.1rem 0 0;
+      }
+      .job-featured-img img {
+        width: 60px;
+        height: 60px;
+      }
+      .job-card-content {
+        padding: 1rem 1rem 1.4rem 1rem;
+      }
+    }
+    .trending-job-card .job-featured-img {
+      flex: 0 0 auto;
+      width: 90px;
+      height: 90px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.1);
+      border: 1px solid rgba(37,99,235,0.15);
+    }
+    .trending-job-card .job-featured-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="jobs-container">
+    <!-- Header Section -->
+    <header class="jobs-header">
+      <h1>Nafasi za Kazi</h1>
+      <p>Tafuta nafasi za kazi zinazokufaa</p>
+    </header>
+
+    <!-- Search and Filters Section -->
+    <section class="search-filters">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Tafuta kazi, kampuni, au eneo...">
+        <button class="search-btn">
+          <i class="fas fa-search"></i>
+          Tafuta
+        </button>
+      </div>
+
+      <div class="filter-groups">
+        <div class="filter-group">
+          <label for="education">Kiwango cha Elimu</label>
+          <select id="education">
+            <option value="">Chagua...</option>
+            <option value="form4">Kidato cha Nne</option>
+            <option value="form6">Kidato cha Sita</option>
+            <option value="certificate">Cheti</option>
+            <option value="diploma">Stashahada</option>
+            <option value="degree">Shahada</option>
+            <option value="masters">Shahada ya Uzamili</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="location">Eneo</label>
+          <select id="location">
+            <option value="">Chagua...</option>
+            <option value="dar">Dar es Salaam</option>
+            <option value="arusha">Arusha</option>
+            <option value="mwanza">Mwanza</option>
+            <option value="dodoma">Dodoma</option>
+            <option value="zanzibar">Zanzibar</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="type">Aina ya Kazi</label>
+          <select id="type">
+            <option value="">Chagua...</option>
+            <option value="remote">Kazi ya Mbali</option>
+            <option value="onsite">Kazi ya Ofisini</option>
+            <option value="hybrid">Mchanganyiko</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="deadline">Muda wa Mwisho</label>
+          <select id="deadline">
+            <option value="">Chagua...</option>
+            <option value="24">Masaa 24</option>
+            <option value="48">Masaa 48</option>
+            <option value="week">Wiki 1</option>
+            <option value="month">Mwezi 1</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="category">Sekta</label>
+          <select id="category">
+            <option value="">Chagua...</option>
+            <optgroup label="Afya">
+              <option value="medical">Huduma za Afya</option>
+              <option value="pharmacy">Famasia</option>
+              <option value="nursing">Uuguzi</option>
+              <option value="lab">Maabara</option>
+              <option value="dental">Meno</option>
+              <option value="mental">Afya ya Akili</option>
+              <option value="nutrition">Lishe</option>
+            </optgroup>
+            <optgroup label="Elimu">
+              <option value="teaching">Ualimu</option>
+              <option value="training">Mafunzo</option>
+              <option value="research">Utafiti</option>
+              <option value="special_ed">Elimu Maalum</option>
+              <option value="admin">Utawala wa Elimu</option>
+              <option value="counseling">Ushauri Nasaha</option>
+            </optgroup>
+            <optgroup label="TEHAMA">
+              <option value="software">Programu</option>
+              <option value="networking">Mitandao</option>
+              <option value="security">Usalama wa TEHAMA</option>
+              <option value="data">Uchambuzi wa Data</option>
+              <option value="cloud">Huduma za Wingu</option>
+              <option value="ai">Akili Bandia</option>
+              <option value="mobile">Programu za Simu</option>
+            </optgroup>
+            <optgroup label="Uhandisi">
+              <option value="civil">Uhandisi wa Ujenzi</option>
+              <option value="mechanical">Uhandisi wa Mitambo</option>
+              <option value="electrical">Uhandisi wa Umeme</option>
+              <option value="chemical">Uhandisi wa Kemikali</option>
+              <option value="mining">Uhandisi wa Madini</option>
+              <option value="environmental">Uhandisi wa Mazingira</option>
+            </optgroup>
+            <optgroup label="Biashara">
+              <option value="accounting">Uhasibu</option>
+              <option value="marketing">Masoko</option>
+              <option value="sales">Mauzo</option>
+              <option value="management">Usimamizi</option>
+              <option value="hr">Rasilimali Watu</option>
+              <option value="finance">Fedha</option>
+              <option value="procurement">Ununuzi</option>
+            </optgroup>
+            <optgroup label="Kilimo">
+              <option value="agriculture">Kilimo</option>
+              <option value="livestock">Ufugaji</option>
+              <option value="fishery">Uvuvi</option>
+              <option value="forestry">Misitu</option>
+              <option value="agribusiness">Biashara ya Kilimo</option>
+            </optgroup>
+            <optgroup label="Utalii">
+              <option value="hospitality">Ukarimu</option>
+              <option value="tourism">Utalii</option>
+              <option value="hotel">Hoteli</option>
+              <option value="travel">Usafiri</option>
+              <option value="events">Matukio</option>
+            </optgroup>
+            <optgroup label="Vyombo vya Habari">
+              <option value="journalism">Uandishi wa Habari</option>
+              <option value="media">Vyombo vya Habari</option>
+              <option value="publishing">Uchapishaji</option>
+              <option value="broadcasting">Utangazaji</option>
+              <option value="digital_media">Mitandao ya Kijamii</option>
+            </optgroup>
+            <optgroup label="Mashirika Yasiyo ya Kiserikali">
+              <option value="ngo">Mashirika Yasiyo ya Kiserikali</option>
+              <option value="development">Maendeleo</option>
+              <option value="health">Afya</option>
+              <option value="education">Elimu</option>
+            </optgroup>
+            <optgroup label="Viwanda">
+              <option value="manufacturing">Viwanda</option>
+              <option value="production">Uzalishaji</option>
+              <option value="quality">Ubora</option>
+              <option value="safety">Usalama</option>
+            </optgroup>
+            <optgroup label="Usafirishaji">
+              <option value="transport">Usafirishaji</option>
+              <option value="logistics">Logistiki</option>
+              <option value="shipping">Usafirishaji</option>
+              <option value="aviation">Ndege</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="experience">Uzoefu</label>
+          <select id="experience">
+            <option value="">Chagua...</option>
+            <option value="fresh">Mhitimu Mpya</option>
+            <option value="1-2">Miaka 1-2</option>
+            <option value="3-5">Miaka 3-5</option>
+            <option value="5+">Zaidi ya Miaka 5</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Jobs Section -->
+    <section>
+      <div class="section-header">
+        <h2>Kazi Zinazovuma Wiki Hii</h2>
+        <a href="#" class="view-all">Tazama Zote</a>
+      </div>
+
+      <div class="jobs-grid trending-jobs">
+        <!-- Example Trending Job Card -->
+        <div class="job-card trending-job-card">
+          <div class="job-featured-img">
+            <img src="jobs.png" alt="Company Logo" />
+          </div>
+          <div class="job-card-content">
+            <div class="job-meta-tags">
+              <span class="job-tag urgent">Haraka</span>
+              <span class="job-tag fulltime">Muda Wote</span>
+              <span class="job-tag location"><i class="fas fa-map-marker-alt"></i> Dar es Salaam</span>
+            </div>
+            <h3 class="job-title">Afisa Masoko</h3>
+            <div class="company-name">Fasta Online Ltd</div>
+            <div class="job-salary"><i class="fas fa-money-bill-wave"></i> 1.2M - 1.8M</div>
+            <p class="job-desc">Tunatafuta Afisa Masoko mwenye uzoefu na ubunifu wa kidigitali. Omba sasa ili kujiunga na timu yetu inayokua haraka!</p>
+          </div>
+        </div>
+        <!-- Add more cards as needed -->
+      </div>
+    </section>
+
+    <!-- Featured Categories Section -->
+    <section class="job-categories">
+      <div class="section-header">
+        <h2>Sekta za Kazi</h2>
+        <a href="#" class="view-all">Tazama Zote</a>
+      </div>
+
+      <div class="categories-grid">
+        <!-- Health Sector -->
+        <div class="category-card health">
+          <div class="category-icon">
+            <i class="fas fa-hospital"></i>
+          </div>
+          <h3>Sekta ya Afya</h3>
+          <p>Nafasi 150+</p>
+          <div class="category-tags">
+            <span>Madaktari</span>
+            <span>Wauguzi</span>
+            <span>Wafamasia</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Education Sector -->
+        <div class="category-card education">
+          <div class="category-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3>Elimu</h3>
+          <p>Nafasi 200+</p>
+          <div class="category-tags">
+            <span>Walimu</span>
+            <span>Wakufunzi</span>
+            <span>Watafiti</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- IT Sector -->
+        <div class="category-card tech">
+          <div class="category-icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h3>TEHAMA</h3>
+          <p>Nafasi 180+</p>
+          <div class="category-tags">
+            <span>Programu</span>
+            <span>Mitandao</span>
+            <span>Data</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Engineering Sector -->
+        <div class="category-card engineering">
+          <div class="category-icon">
+            <i class="fas fa-hard-hat"></i>
+          </div>
+          <h3>Uhandisi</h3>
+          <p>Nafasi 120+</p>
+          <div class="category-tags">
+            <span>Ujenzi</span>
+            <span>Umeme</span>
+            <span>Mitambo</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Business Sector -->
+        <div class="category-card business">
+          <div class="category-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Biashara</h3>
+          <p>Nafasi 250+</p>
+          <div class="category-tags">
+            <span>Uhasibu</span>
+            <span>Masoko</span>
+            <span>Usimamizi</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Government Sector -->
+        <div class="category-card government">
+          <div class="category-icon">
+            <i class="fas fa-landmark"></i>
+          </div>
+          <h3>Serikali</h3>
+          <p>Nafasi 100+</p>
+          <div class="category-tags">
+            <span>Utumishi</span>
+            <span>Utawala</span>
+            <span>Mahakama</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Agriculture Sector -->
+        <div class="category-card agriculture">
+          <div class="category-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h3>Kilimo</h3>
+          <p>Nafasi 160+</p>
+          <div class="category-tags">
+            <span>Kilimo</span>
+            <span>Ufugaji</span>
+            <span>Uvuvi</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Tourism Sector -->
+        <div class="category-card tourism">
+          <div class="category-icon">
+            <i class="fas fa-umbrella-beach"></i>
+          </div>
+          <h3>Utalii</h3>
+          <p>Nafasi 140+</p>
+          <div class="category-tags">
+            <span>Hoteli</span>
+            <span>Utalii</span>
+            <span>Safari</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Media Sector -->
+        <div class="category-card media">
+          <div class="category-icon">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <h3>Vyombo vya Habari</h3>
+          <p>Nafasi 90+</p>
+          <div class="category-tags">
+            <span>Uandishi</span>
+            <span>Utangazaji</span>
+            <span>Mitandao</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- NGO Sector -->
+        <div class="category-card ngo">
+          <div class="category-icon">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <h3>Mashirika Yasiyo ya Kiserikali</h3>
+          <p>Nafasi 110+</p>
+          <div class="category-tags">
+            <span>Maendeleo</span>
+            <span>Afya</span>
+            <span>Elimu</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Manufacturing Sector -->
+        <div class="category-card manufacturing">
+          <div class="category-icon">
+            <i class="fas fa-industry"></i>
+          </div>
+          <h3>Viwanda</h3>
+          <p>Nafasi 130+</p>
+          <div class="category-tags">
+            <span>Uzalishaji</span>
+            <span>Ubora</span>
+            <span>Usalama</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+
+        <!-- Transportation Sector -->
+        <div class="category-card transport">
+          <div class="category-icon">
+            <i class="fas fa-truck-moving"></i>
+          </div>
+          <h3>Usafirishaji</h3>
+          <p>Nafasi 95+</p>
+          <div class="category-tags">
+            <span>Usafiri</span>
+            <span>Logistiki</span>
+            <span>Forodha</span>
+          </div>
+          <a href="#" class="category-link">Tazama Nafasi</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Urgent Deadlines Section -->
+    <section>
+      <div class="section-header">
+        <h2>Kazi za Haraka</h2>
+        <a href="#" class="view-all">Tazama Zote</a>
+      </div>
+
+      <div class="jobs-grid">
+        <!-- More job cards with urgent deadlines -->
+      </div>
+    </section>
+
+    <!-- Internships Section -->
+    <section>
+      <div class="section-header">
+        <h2>Mafunzo kwa Vitendo</h2>
+        <a href="#" class="view-all">Tazama Yote</a>
+      </div>
+
+      <div class="jobs-grid">
+        <!-- Internship job cards -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filter functionality
+      const filters = document.querySelectorAll('select');
+      filters.forEach(filter => {
+        filter.addEventListener('change', function() {
+          // Implement filter logic here
+          console.log('Filter changed:', this.id, this.value);
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.querySelector('.search-input');
+      const searchBtn = document.querySelector('.search-btn');
+
+      searchBtn.addEventListener('click', function() {
+        // Implement search logic here
+        console.log('Search:', searchInput.value);
+      });
+
+      // Apply button functionality
+      const applyBtns = document.querySelectorAll('.apply-btn');
+      applyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Implement apply logic here
+          console.log('Applied for job');
+        });
+      });
+
+      // Add loading animation when filtering
+      function showLoading() {
+        const jobsGrid = document.querySelector('.jobs-grid');
+        jobsGrid.style.opacity = '0.5';
+        // Add loading spinner
+        setTimeout(() => {
+          jobsGrid.style.opacity = '1';
+        }, 500);
+      }
+
+      // Update deadline countdowns
+      function updateDeadlines() {
+        const deadlines = document.querySelectorAll('.job-deadline span');
+        deadlines.forEach(deadline => {
+          // Implement countdown logic here
+        });
+      }
+
+      // Call updateDeadlines every minute
+      setInterval(updateDeadlines, 60000);
+
+      var logo = document.querySelector('.fasta-logo');
+      if (logo) {
+        logo.classList.add('loaded');
+      }
+    });
+  </script>
+</body>
+</html>

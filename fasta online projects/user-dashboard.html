@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fasta Online - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #60a5fa;
+      --success-color: #22c55e;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--gray-50);
+      min-height: 100vh;
+    }
+
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: white;
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sidebar-header img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.25rem;
+      color: var(--gray-800);
+    }
+
+    .nav-menu {
+      padding: 1.5rem 1rem;
+      flex: 1;
+    }
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--gray-600);
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--gray-100);
+      color: var(--primary-color);
+    }
+
+    .nav-link.active {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .nav-link i {
+      font-size: 1.25rem;
+      width: 1.5rem;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-header h2 {
+      font-size: 1.5rem;
+      color: var(--gray-800);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      color: var(--gray-500);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--gray-200);
+    }
+
+    .stat-card h3 {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .applications-list {
+      background: white;
+      border-radius: 0.75rem;
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+
+    .applications-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .applications-header h3 {
+      font-size: 1.125rem;
+      color: var(--gray-800);
+    }
+
+    .application-item {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .application-item:last-child {
+      border-bottom: none;
+    }
+
+    .application-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gray-100);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+    }
+
+    .application-info {
+      flex: 1;
+    }
+
+    .application-name {
+      font-weight: 500;
+      color: var(--gray-800);
+      margin-bottom: 0.25rem;
+    }
+
+    .application-status {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+
+    .progress-bar {
+      width: 150px;
+      height: 6px;
+      background: var(--gray-200);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-color);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: var(--warning-color);
+      color: white;
+    }
+
+    .status-approved {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .user-profile {
+      padding: 1rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .user-info:hover {
+      background: var(--gray-100);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+    }
+
+    .user-details {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: 500;
+      color: var(--gray-800);
+    }
+
+    .user-email {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      background: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    /* Enhanced Mobile Styles */
+    @media (max-width: 768px) {
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      .dashboard-container {
+        position: relative;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        transition: transform 0.3s ease;
+        background: white;
+      }
+
+      .sidebar.active {
+        transform: translateX(280px);
+      }
+
+      .main-content {
+        margin-top: 4rem;
+        padding: 1rem;
+      }
+
+      .page-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .stat-card {
+        padding: 1rem;
+      }
+
+      .stat-card .value {
+        font-size: 1.25rem;
+      }
+
+      .applications-list {
+        margin-top: 1.5rem;
+      }
+
+      .application-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+      }
+
+      .application-info {
+        width: 100%;
+      }
+
+      .progress-bar {
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+
+      .status-badge {
+        align-self: flex-start;
+      }
+    }
+
+    /* Small Mobile Devices */
+    @media (max-width: 380px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header h2 {
+        font-size: 1.25rem;
+      }
+
+      .application-item {
+        padding: 0.75rem;
+      }
+    }
+
+    /* Overlay for Mobile Navigation */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 90;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Enhanced Touch Targets for Mobile */
+    @media (max-width: 768px) {
+      .nav-link {
+        padding: 1rem;
+      }
+
+      .user-info {
+        padding: 1rem;
+      }
+
+      .applications-header {
+        padding: 1rem;
+      }
+
+      .application-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .status-badge {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    /* Enhanced Mobile Animations */
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleInFade {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Mobile Animation Implementations */
+    @media (max-width: 768px) {
+      .sidebar {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .sidebar.active {
+        animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .sidebar-overlay {
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .mobile-nav-toggle {
+        transition: transform 0.3s ease;
+      }
+
+      .mobile-nav-toggle:active {
+        transform: scale(0.9);
+      }
+
+      .mobile-nav-toggle.active i {
+        transform: rotate(90deg);
+        transition: transform 0.3s ease;
+      }
+
+      .page-header {
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .stats-grid {
+        animation: fadeInUp 0.5s ease-out 0.1s both;
+      }
+
+      .stat-card {
+        animation: scaleInFade 0.4s ease-out both;
+      }
+
+      .stat-card:nth-child(1) { animation-delay: 0.2s; }
+      .stat-card:nth-child(2) { animation-delay: 0.3s; }
+      .stat-card:nth-child(3) { animation-delay: 0.4s; }
+      .stat-card:nth-child(4) { animation-delay: 0.5s; }
+
+      .applications-list {
+        animation: fadeInUp 0.5s ease-out 0.3s both;
+      }
+
+      .application-item {
+        animation: slideInRight 0.4s ease-out both;
+      }
+
+      .application-item:nth-child(1) { animation-delay: 0.4s; }
+      .application-item:nth-child(2) { animation-delay: 0.5s; }
+      .application-item:nth-child(3) { animation-delay: 0.6s; }
+
+      /* Touch Feedback Animations */
+      .nav-link {
+        transition: all 0.2s ease;
+      }
+
+      .nav-link:active {
+        transform: scale(0.98);
+        background: var(--primary-light);
+      }
+
+      .application-item {
+        transition: transform 0.2s ease;
+      }
+
+      .application-item:active {
+        transform: scale(0.99);
+      }
+
+      /* Loading Animations */
+      @keyframes progressPulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+
+      .progress-bar.loading .progress-fill {
+        animation: progressPulse 1.5s infinite;
+      }
+
+      /* Refresh Animation */
+      .refresh-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .refresh-icon.spinning {
+        animation: spin 1s linear infinite;
+      }
+
+      /* Status Badge Animations */
+      .status-badge {
+        transition: transform 0.2s ease;
+      }
+
+      .status-badge:active {
+        transform: scale(0.95);
+      }
+
+      /* Navigation Menu Animation */
+      .nav-menu {
+        opacity: 0;
+        animation: fadeInUp 0.3s ease-out 0.1s forwards;
+      }
+
+      /* User Profile Animation */
+      .user-info {
+        opacity: 0;
+        animation: fadeInUp 0.3s ease-out 0.2s forwards;
+      }
+    }
+
+    /* Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="logo.jpg" alt="Fasta Online Logo">
+        <h1>Fasta Online</h1>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-file-alt"></i>
+            <span>Maombi</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-download"></i>
+            <span>Nyaraka</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-bell"></i>
+            <span>Arifa</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Mipangilio</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="user-profile">
+        <div class="user-info">
+          <div class="user-avatar">JD</div>
+          <div class="user-details">
+            <div class="user-name">John Doe</div>
+            <div class="user-email">john@example.com</div>
+          </div>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <h2>Karibu, John!</h2>
+        <p>Hapa ni muhtasari wa maombi yako</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Maombi Yote</h3>
+          <div class="value">12</div>
+        </div>
+        <div class="stat-card">
+          <h3>Yanayosubiri</h3>
+          <div class="value">3</div>
+        </div>
+        <div class="stat-card">
+          <h3>Yamekamilika</h3>
+          <div class="value">8</div>
+        </div>
+        <div class="stat-card">
+          <h3>Yamekataliwa</h3>
+          <div class="value">1</div>
+        </div>
+      </div>
+
+      <div class="applications-list">
+        <div class="applications-header">
+          <h3>Maombi ya Hivi Karibuni</h3>
+          <a href="#" style="color: var(--primary-color); text-decoration: none;">Tazama Yote</a>
+        </div>
+
+        <div class="application-item">
+          <div class="application-icon">
+            <i class="fas fa-id-card"></i>
+          </div>
+          <div class="application-info">
+            <div class="application-name">NIDA</div>
+            <div class="application-status">Inaendelea - 75% Imekamilika</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 75%"></div>
+          </div>
+          <span class="status-badge status-pending">Inasubiri</span>
+        </div>
+
+        <div class="application-item">
+          <div class="application-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="application-info">
+            <div class="application-name">Cheti cha Kuzaliwa</div>
+            <div class="application-status">Imekamilika</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%"></div>
+          </div>
+          <span class="status-badge status-approved">Imeidhinishwa</span>
+        </div>
+
+        <div class="application-item">
+          <div class="application-icon">
+            <i class="fas fa-passport"></i>
+          </div>
+          <div class="application-info">
+            <div class="application-name">Pasipoti</div>
+            <div class="application-status">Inaendelea - 30% Imekamilika</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 30%"></div>
+          </div>
+          <span class="status-badge status-pending">Inasubiri</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Mobile Navigation Toggle Button -->
+  <button class="mobile-nav-toggle" id="mobileNavToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Add Overlay for Mobile Navigation -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileNavToggle = document.getElementById('mobileNavToggle');
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      // Toggle mobile navigation
+      function toggleMobileNav() {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+      }
+
+      mobileNavToggle.addEventListener('click', toggleMobileNav);
+      sidebarOverlay.addEventListener('click', toggleMobileNav);
+
+      // Close mobile nav when clicking a link
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          if (window.innerWidth <= 768) {
+            toggleMobileNav();
+          }
+        });
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Handle user profile dropdown (can be implemented later)
+      const userInfo = document.querySelector('.user-info');
+      userInfo.addEventListener('click', function() {
+        // Implement dropdown menu
+      });
+    });
+  </script>
+</body>
+</html>

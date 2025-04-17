@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fasta Online - Jenga CV yako</title>
+    <link rel="stylesheet" href="cv-builder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Source+Sans+Pro:wght@400;600&family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="cv-builder-container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="cvStrength"></div>
+            </div>
+            <div class="progress-text">
+                <span id="cvStrengthText">CV yako imekamilika kwa 0%</span>
+                <div class="strength-meter">
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>Nguvu ya CV</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Template Selection Section -->
+        <div class="template-selection">
+            <h2>Chagua Muundo wa CV</h2>
+            <div class="templates-grid">
+                <!-- Modern Template -->
+                <div class="template-card" data-template="modern">
+                    <div class="template-preview modern">
+                        <div class="template-header"></div>
+                        <div class="template-body">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Modern Professional</h3>
+                        <p>Muundo wa kisasa na wa kitaaluma</p>
+                        <button class="select-template-btn active" data-template="modern">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Classic Template -->
+                <div class="template-card" data-template="classic">
+                    <div class="template-preview classic">
+                        <div class="template-header classic"></div>
+                        <div class="template-body">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Classic Executive</h3>
+                        <p>Muundo wa kawaida na wa heshima</p>
+                        <button class="select-template-btn" data-template="classic">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Creative Template -->
+                <div class="template-card" data-template="creative">
+                    <div class="template-preview creative">
+                        <div class="template-sidebar"></div>
+                        <div class="template-content">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Creative Impact</h3>
+                        <p>Muundo wa ubunifu na uvutio</p>
+                        <button class="select-template-btn" data-template="creative">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Minimalist Template -->
+                <div class="template-card" data-template="minimalist">
+                    <div class="template-preview minimalist">
+                        <div class="template-header minimalist"></div>
+                        <div class="template-content">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Minimalist Clean</h3>
+                        <p>Muundo rahisi na safi</p>
+                        <button class="select-template-btn" data-template="minimalist">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Academic Template -->
+                <div class="template-card" data-template="academic">
+                    <div class="template-preview academic">
+                        <div class="template-header academic"></div>
+                        <div class="template-content">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Academic Excellence</h3>
+                        <p>Muundo wa kitaaluma na kisomi</p>
+                        <button class="select-template-btn" data-template="academic">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Technical Template -->
+                <div class="template-card" data-template="technical">
+                    <div class="template-preview technical">
+                        <div class="template-sidebar technical"></div>
+                        <div class="template-content">
+                            <div class="template-section"></div>
+                            <div class="template-section"></div>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Technical Expert</h3>
+                        <p>Muundo wa kiufundi na kitaalamu</p>
+                        <button class="select-template-btn" data-template="technical">
+                            <i class="fas fa-check-circle"></i> Chagua
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CV Form -->
+        <div class="cv-form">
+            <div class="form-sections">
+                <!-- Personal Info Section -->
+                <section class="form-section active" id="personal-info">
+                    <h2>Taarifa Binafsi</h2>
+                    <div class="form-group">
+                        <label for="fullName">Jina Kamili</label>
+                        <input type="text" id="fullName" class="form-control" data-strength="10">
+                        <div class="ai-suggestion"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profession">Taaluma</label>
+                        <input type="text" id="profession" class="form-control" data-strength="8">
+                        <div class="ai-suggestion"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Barua Pepe</label>
+                            <input type="email" id="email" class="form-control" data-strength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Simu</label>
+                            <input type="tel" id="phone" class="form-control" data-strength="5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Makazi</label>
+                        <input type="text" id="location" class="form-control" data-strength="5">
+                    </div>
+                </section>
+
+                <!-- Education Section -->
+                <section class="form-section" id="education">
+                    <h2>Elimu</h2>
+                    <div class="education-entries" id="educationEntries">
+                        <div class="education-entry">
+                            <div class="form-group">
+                                <label>Chuo/Shule</label>
+                                <input type="text" class="form-control institution" data-strength="8">
+                                <div class="ai-suggestion"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Shahada/Cheti</label>
+                                    <input type="text" class="form-control degree" data-strength="8">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mwaka</label>
+                                    <input type="text" class="form-control year" data-strength="5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Maelezo ya Ziada</label>
+                                <textarea class="form-control description" data-strength="5"></textarea>
+                                <div class="ai-suggestion">
+                                    <i class="fas fa-lightbulb"></i>
+                                    Ongeza taarifa za mafanikio yako muhimu
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-entry-btn" onclick="addEducationEntry()">
+                        <i class="fas fa-plus"></i> Ongeza Elimu
+                    </button>
+                </section>
+
+                <!-- Experience Section -->
+                <section class="form-section" id="experience">
+                    <h2>Uzoefu wa Kazi</h2>
+                    <div class="experience-entries" id="experienceEntries">
+                        <div class="experience-entry">
+                            <div class="form-group">
+                                <label>Kampuni</label>
+                                <input type="text" class="form-control company" data-strength="8">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Cheo</label>
+                                    <input type="text" class="form-control position" data-strength="8">
+                                </div>
+                                <div class="form-group">
+                                    <label>Muda</label>
+                                    <input type="text" class="form-control duration" data-strength="5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Majukumu</label>
+                                <div class="responsibilities-container">
+                                    <div class="responsibility-entry">
+                                        <textarea class="form-control responsibility" data-strength="10"></textarea>
+                                        <div class="ai-suggestion">
+                                            <i class="fas fa-magic"></i>
+                                            Tumia maneno yanayoonyesha matokeo (e.g., "Niliongeza mauzo kwa 50%")
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="add-responsibility-btn" onclick="addResponsibility(this)">
+                                    <i class="fas fa-plus"></i> Ongeza Jukumu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-entry-btn" onclick="addExperienceEntry()">
+                        <i class="fas fa-plus"></i> Ongeza Uzoefu
+                    </button>
+                </section>
+
+                <!-- Skills Section -->
+                <section class="form-section" id="skills">
+                    <h2>Ujuzi</h2>
+                    <div class="skills-container">
+                        <div class="form-group">
+                            <label>Ujuzi wa Kitaaluma</label>
+                            <div class="skills-input-container">
+                                <input type="text" id="skillInput" class="form-control" placeholder="Andika ujuzi na ubonyeze 'Enter'">
+                                <div class="skills-suggestions" id="skillsSuggestions"></div>
+                            </div>
+                            <div class="skills-tags" id="skillsTags"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Lugha</label>
+                            <div class="language-entries" id="languageEntries">
+                                <div class="language-entry">
+                                    <input type="text" class="form-control language" placeholder="Lugha">
+                                    <select class="form-control proficiency">
+                                        <option value="basic">Msingi</option>
+                                        <option value="intermediate">Wastani</option>
+                                        <option value="advanced">Mahiri</option>
+                                        <option value="native">Lugha ya Kwanza</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="add-language-btn" onclick="addLanguage()">
+                                <i class="fas fa-plus"></i> Ongeza Lugha
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Navigation and Actions -->
+            <div class="form-navigation">
+                <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">
+                    <i class="fas fa-arrow-left"></i> Rudi Nyuma
+                </button>
+                <button class="nav-btn" id="nextBtn" onclick="navigate(1)">
+                    <i class="fas fa-arrow-right"></i> Endelea
+                </button>
+                <button class="generate-btn" id="generateBtn" onclick="generateCV()">
+                    <i class="fas fa-file-pdf"></i> Tengeneza PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- CV Preview -->
+        <div class="cv-preview" id="cvPreview">
+            <div class="preview-header">
+                <h3>Muonekano wa CV</h3>
+                <div class="preview-actions">
+                    <button class="theme-btn" onclick="changeTheme()">
+                        <i class="fas fa-palette"></i> Badili Muonekano
+                    </button>
+                    <button class="font-btn" onclick="changeFont()">
+                        <i class="fas fa-font"></i> Badili Fonti
+                    </button>
+                </div>
+            </div>
+            <div class="preview-content" id="previewContent">
+                <!-- Preview content will be dynamically updated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Spell Check Modal -->
+    <div class="modal" id="spellCheckModal">
+        <div class="modal-content">
+            <h3>Ukaguzi wa Tahajia</h3>
+            <div class="spell-check-results"></div>
+            <div class="modal-actions">
+                <button onclick="applySpellCheck()">Rekebisha Zote</button>
+                <button onclick="closeModal()">Funga</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cv-builder.js"></script>
+</body>
+</html>
